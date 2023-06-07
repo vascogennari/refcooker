@@ -14,6 +14,6 @@ To see the available tags:
     
 To add a new reference to the *bibliography.txt* file:
 
-    python oven.py --add-reference 1 --arxiv <1970.1234> --author <chandrasekhar+> --year <1970> --tag <black-holes> <perturbations> ...
+    python oven.py --add-ref 1 --arxiv <1970.1234> --author <chandrasekhar> --year <1970> --tag <black-holes> <perturbations> ...
 
 That's all!
