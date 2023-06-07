@@ -2,7 +2,7 @@
 
 This package is meant for retriving the literature on some topic, based on a personal bibliography.
 
-## Usage
+### Usage
 
 You don't need to install anything. For example, to list the available papers on GWTC-3, simply write:
 
