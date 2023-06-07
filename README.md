@@ -12,7 +12,7 @@ To see the available tags:
 
     python oven.py --options 1
     
-To add a new reference to the bibliography:
+To add a new reference to the *bibliography.txt* file:
 
     python oven.py --add-reference 1 --arxiv <1970.1234> --author <chandrasekhar+> --year <1970> --tag <black-holes> <perturbations> ...
 
