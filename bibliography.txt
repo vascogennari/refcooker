@@ -92,3 +92,9 @@ gr-qc/0610122	buonanno+	2007	mode-mixing
 2110.11378	cano+	2022	qnms-eft
 2304.02663	cano+	2023	qnms-eft
 1912.09917	sennet+	2020	bounds-eft
+10.1103/PhysRevLett.52.1361	ferrari+	1984	lightring
+10.1103/PhysRevD.30.295	ferrari+	1984	lightring
+0812.1806	cardoso+	2009	lightring
+1602.07309	cardoso+	2016	lightring
+1609.00083	khanna+	2017	lightring
+1207.4253	yang+	2012	lightring

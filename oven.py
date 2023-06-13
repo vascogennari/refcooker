@@ -2,6 +2,9 @@ import argparse, pandas as pd
 
 def return_query(df, key):
 
+    # Sort the data frame by years
+    df = df.sort_values('year')
+
     print(f'\nThis are the papers on {key}:\n')
     for idx in df.index:
 
@@ -41,6 +44,16 @@ def check_tag_query(df, key):
     if key not in df.tag.unique():
         raise ValueError('The requested tag is not currently available. Please, use "-o 1" to see the currently available options.')
 
+def print_help():
+
+    row_1 = '\nTo add a new paper to the bibliography.txt file:\npython oven.py -ar 1 -x 1970.1234 -a chandrasekhar -y 1970 -t black-holes perturbations\n\n'
+    row_2 = 'To list the archived papers on "black-holes":\npython oven.py -q black-holes\n\n'
+    row_3 = 'To see the available tags:\npython oven.py -o 1\n'
+
+    txt = row_1 + row_2 + row_3
+    print(txt)
+    exit()
+
 def add_reference(args):
 
     if (args.arxiv == None or args.author == None or args.year == None or args.tag == False) and args.doi == None:
@@ -73,6 +86,9 @@ def add_reference(args):
 if __name__=='__main__':
 
     parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help = False)
+    parser.add_argument('-h',  '--help',    type = int, metavar = 'help',    default = False)
+
     parser.add_argument('-p',  '--paper',   type = str, metavar = 'paper',   default = None)
     parser.add_argument('-q',  '--query',   type = str, metavar = 'query',   default = None)
     parser.add_argument('-i',  '--inspire', type = int, metavar = 'inspire', default = False)
@@ -86,6 +102,8 @@ if __name__=='__main__':
     parser.add_argument('-t',  '--tag',     nargs='+',  help='<Required> Set flag', required = False)
 
     args = parser.parse_args()
+
+    if args.help: print_help()
 
     # Add reference if passed
     if args.add_ref: add_reference(args)
