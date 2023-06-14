@@ -5,17 +5,25 @@ def return_query(df, key):
     # Sort the data frame by years
     df = df.sort_values('year')
 
+    lines = []
     print(f'\nThis are the papers on {key}:\n')
     for idx in df.index:
 
         # Check it is not a DOI
         DOI = False
         tmp = df.paper[idx].split('/')
-        if len(tmp) > 2: DOI = True
+        if len(tmp) > 2 or (len(tmp) == 2 and 'Phys' in tmp[1]): DOI = True
 
-        if not DOI: line = f'https://arxiv.org/abs/{df.paper[idx]}\t{df.author[idx]} ({df.year[idx]})'
-        else:       line = f'DOI: {df.paper[idx]}\t{df.author[idx]} ({df.year[idx]})'
-        print(line)
+        if not DOI: link = f'https://arxiv.org/abs/{df.paper[idx]}'
+        else:       link = f'DOI: {df.paper[idx]}'
+
+        author = f'{df.author[idx]}\t({df.year[idx]})'
+        lines.append([link, author])
+    
+    widths = [max([len(item) for item in col]) for col in zip(*lines)]
+    fmt = ''.join(['{{:{}}}'.format(width+4) for width in widths])
+    for line in lines:
+        print(fmt.format(*line))
     print('')
 
     return 0
@@ -32,12 +40,12 @@ def return_inspire_links(df, key):
 
 def print_possible_tags(df):
 
+    df = df.sort_values('tag')
     print(f'\nThis are the available options for query:\n')
     for tag in df.tag.unique():
         print(tag)
     print('')
-
-    return 0
+    exit()
 
 def check_tag_query(df, key):
 
