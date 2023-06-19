@@ -10,9 +10,8 @@ def return_query(df, key):
     for idx in df.index:
 
         # Check it is not a DOI
-        DOI = False
-        tmp = df.paper[idx].split('/')
-        if len(tmp) > 2 or (len(tmp) == 2 and 'Phys' in tmp[1]): DOI = True
+        split = df.paper[idx].split('/')
+        DOI   = DOI_conditions(split)
 
         if not DOI: link = f'https://arxiv.org/abs/{df.paper[idx]}'
         else:       link = f'DOI: {df.paper[idx]}'
@@ -27,6 +26,47 @@ def return_query(df, key):
     print('')
 
     return 0
+
+def add_reference(args):
+
+    if (args.arxiv == None or args.author == None or args.year == None or args.tag == False) and args.doi == None:
+        raise ValueError('If you want to add a new reference, you need to pass ArXiv ID, author, year, and at least one tag.')
+    
+    DOI = False
+    if   not args.arxiv == None and args.doi == None: pass
+    elif args.arxiv == None and not args.doi == None:
+        args.arxiv = args.doi
+        DOI = True
+    else: raise ValueError('You cannot pass both an ArXiv and a DOI.')
+
+    with open('bibliography.txt', 'r+') as f:
+        lines = f.readlines()
+        print('')
+        for tag in args.tag:
+            newline = f'{args.arxiv}\t{args.author}\t{args.year}\t{tag}'
+            if newline+'\n' in lines:
+                print(f'The proposed paper {args.arxiv} is already present in the bibliography, at least with the tag {tag}\n')
+            else:
+                f.write('\n'+newline)
+                print(f'The following paper has been correctly added to the bibliography with the tag {tag}')
+                if   not DOI: line = f'https://arxiv.org/abs/{args.arxiv}\t{args.author} ({args.year})\n'
+                else:         line = f'DOI: {args.doi}\t{args.author} ({args.year})\n'
+                print(line)
+        f.close
+
+    return 0
+
+def DOI_conditions(split):
+
+    DOI = False
+
+    cond_1 = len(split) > 2
+    cond_2 = len(split) == 2 and 'Phys' in split[1]
+    cond_3 = len(split) == 2 and len(split[0].split('.')) > 1
+
+    if cond_1 or cond_2 or cond_3: DOI = True
+
+    return DOI
 
 def return_inspire_links(df, key):
 
@@ -62,34 +102,6 @@ def print_help():
     print(txt)
     exit()
 
-def add_reference(args):
-
-    if (args.arxiv == None or args.author == None or args.year == None or args.tag == False) and args.doi == None:
-        raise ValueError('If you want to add a new reference, you need to pass ArXiv ID, author, year, and at least one tag.')
-    
-    DOI = False
-    if   not args.arxiv == None and args.doi == None: pass
-    elif args.arxiv == None and not args.doi == None:
-        args.arxiv = args.doi
-        DOI = True
-    else: raise ValueError('You cannot pass both an ArXiv and a DOI.')
-
-    with open('bibliography.txt', 'r+') as f:
-        lines = f.readlines()
-        print('')
-        for tag in args.tag:
-            newline = f'{args.arxiv}\t{args.author}\t{args.year}\t{tag}'
-            if newline+'\n' in lines:
-                print(f'The proposed paper {args.arxiv} is already present in the bibliography, at least with the tag {tag}\n')
-            else:
-                f.write('\n'+newline)
-                print(f'The following paper has been correctly added to the bibliography with the tag {tag}')
-                if   not DOI: line = f'https://arxiv.org/abs/{args.arxiv}\t{args.author} ({args.year})\n'
-                else:         line = f'DOI: {args.doi}\t{args.author} ({args.year})\n'
-                print(line)
-        f.close
-
-    return 0
     
 if __name__=='__main__':
 
